@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "./components/button";
 import { Input } from "./components/input";
 // import { useToast } from "./hooks-toast";
-import { ScrollArea } from "./components/scroll-area";
 import { RadioGroup, RadioGroupItem } from "./components/radio-group";
 import { Checkbox } from "./components/checkbox";
 import {
@@ -20,11 +19,9 @@ import {
   CalendarIcon,
   StarIcon,
   UploadIcon,
-  SendIcon,
   BotIcon,
   UserIcon,
   CheckCircleIcon,
-  LoaderIcon,
 } from "lucide-react";
 import { format } from "date-fns";
 import { apiRequest } from "./lib/utils";
@@ -1036,68 +1033,13 @@ export default function App() {
     }
   }
 
-  // ---- render ----
   if (isLoading) {
-    return (
-      <div style={styles.loadingPage}>
-        <div style={styles.center}>
-          <LoaderIcon
-            style={{
-              width: 32,
-              height: 32,
-              margin: "0 auto",
-              color: "#2563eb",
-            }}
-            className="animate-spin"
-          />
-          <p style={{ color: "#4b5563", marginTop: 8 }}>Loading your form.</p>
-        </div>
-      </div>
-    );
+    return null;
   }
 
-  if (!form) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          height: "100vh",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "linear-gradient(135deg,#fee2e2,#ffe4e6)",
-        }}
-      >
-        <div style={styles.center}>
-          <div
-            style={{
-              width: 64,
-              height: 64,
-              background: "#fee2e2",
-              borderRadius: 9999,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              margin: "0 auto",
-            }}
-          >
-            <span style={{ color: "#dc2626", fontSize: 24 }}>!</span>
-          </div>
-          <h2
-            style={{
-              fontSize: 18,
-              fontWeight: 600,
-              color: "#111827",
-              marginTop: 12,
-            }}
-          >
-            Form not found
-          </h2>
-          <p style={{ color: "#4b5563", marginTop: 6 }}>
-            The form you're looking for doesn't exist.
-          </p>
-        </div>
-      </div>
-    );
+  if (!isLoading && !form) {
+    console.error("Chatbot not found!");
+    return null;
   }
 
   return (
