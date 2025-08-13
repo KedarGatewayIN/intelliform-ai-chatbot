@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && for /f \"delims=\" %i in ('dir /b build\\static\\js\\main.*.js') do ren \"build\\static\\js\\%i\" chatbot.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
