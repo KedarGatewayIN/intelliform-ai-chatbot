@@ -1,5 +1,5 @@
-import React, { forwardRef } from "react";
-import * as LabelPrimitive from "@radix-ui/react-label";
+import { forwardRef } from "react"
+import * as LabelPrimitive from "@radix-ui/react-label"
 
 const Label = forwardRef(({ className = "", ...props }, ref) => {
   return (
@@ -16,15 +16,11 @@ const Label = forwardRef(({ className = "", ...props }, ref) => {
         }
       `}</style>
 
-      <LabelPrimitive.Root
-        ref={ref}
-        className={`label ${className}`}
-        {...props}
-      />
+      <LabelPrimitive.Root ref={ref} className={`label ${className}`} {...props} />
     </>
-  );
-});
+  )
+})
 
-Label.displayName = LabelPrimitive.Root.displayName;
+Label.displayName = LabelPrimitive.Root.displayName
 
-export { Label };
+export { Label }

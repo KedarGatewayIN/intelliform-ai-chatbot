@@ -1,14 +1,11 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 
 const Popover = PopoverPrimitive.Root;
 const PopoverTrigger = PopoverPrimitive.Trigger;
 
 const PopoverContent = forwardRef(
-  (
-    { className = "", align = "center", sideOffset = 4, ...props },
-    ref
-  ) => {
+  ({ className = "", align = "center", sideOffset = 4, ...props }, ref) => {
     return (
       <>
         <style>{`

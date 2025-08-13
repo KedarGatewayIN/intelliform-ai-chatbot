@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 import * as SliderPrimitive from "@radix-ui/react-slider";
 
 const Slider = forwardRef(({ className = "", ...props }, ref) => {
@@ -6,39 +6,47 @@ const Slider = forwardRef(({ className = "", ...props }, ref) => {
     <>
       <style>{`
         .slider {
-          position: relative; /* relative */
-          display: flex; /* flex */
-          width: 100%; /* w-full */
-          touch-action: none; /* touch-none */
-          user-select: none; /* select-none */
-          align-items: center; /* items-center */
+          position: relative;
+          display: flex;
+          width: 100%;
+          touch-action: none;
+          user-select: none;
+          align-items: center;
         }
         .slider-track {
-          position: relative; /* relative */
-          height: 0.5rem; /* h-2 */
-          width: 100%; /* w-full */
-          flex-grow: 1; /* grow */
-          overflow: hidden; /* overflow-hidden */
-          border-radius: 9999px; /* rounded-full */
-          background-color: rgb(229, 231, 235); /* bg-secondary */
+          position: relative;
+          height: 0.75rem;
+          width: 100%;
+          flex-grow: 1;
+          overflow: hidden;
+          border-radius: 9999px;
+          background: rgba(226, 232, 240, 0.5);
         }
         .slider-range {
-          position: absolute; /* absolute */
-          height: 100%; /* h-full */
-          background-color: rgb(59, 130, 246); /* bg-primary */
+          position: absolute;
+          height: 100%;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 9999px;
         }
         .slider-thumb {
-          display: block; /* block */
-          height: 1.25rem; /* h-5 */
-          width: 1.25rem; /* w-5 */
-          border-radius: 9999px; /* rounded-full */
-          border: 2px solid rgb(59, 130, 246); /* border-primary */
-          background-color: white; /* bg-background */
-          transition: background-color 0.15s, border-color 0.15s;
-          outline: none; /* focus-visible:outline-none */
+          display: block;
+          height: 1.5rem;
+          width: 1.5rem;
+          border-radius: 9999px;
+          border: 3px solid #667eea;
+          background: rgba(255, 255, 255, 0.95);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          outline: none;
+          cursor: pointer;
+          backdrop-filter: blur(10px);
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
         }
         .slider-thumb:focus-visible {
-          box-shadow: 0 0 0 2px rgb(147, 197, 253); /* ring-2 ring-ring */
+          box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+        }
+        .slider-thumb:hover {
+          transform: scale(1.1);
+          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
         }
         .slider-thumb:disabled {
           pointer-events: none;

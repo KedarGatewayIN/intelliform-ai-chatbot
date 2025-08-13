@@ -31,19 +31,42 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     height: "100vh",
-    background: "linear-gradient(135deg,#eff6ff,#ffffff 40%,#eef2ff)",
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    position: "relative",
+    overflow: "hidden",
   },
   header: {
-    background: "rgba(255,255,255,0.8)",
-    backdropFilter: "blur(6px)",
-    borderBottom: "1px solid #e5e7eb",
-    padding: "16px 24px",
-    boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+    background: "rgba(255,255,255,0.95)",
+    backdropFilter: "blur(20px)",
+    borderBottom: "1px solid rgba(255,255,255,0.2)",
+    padding: "20px 24px",
+    boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+    position: "relative",
   },
-  headerInner: { maxWidth: 1024, margin: "0 auto" },
-  logo: { height: 32, width: "auto", display: "block" },
-  h1: { fontSize: 20, fontWeight: 700, color: "#111827", margin: "8px 0 0" },
-  pDesc: { marginTop: 4, color: "#4b5563" },
+  headerInner: {
+    maxWidth: 1024,
+    margin: "0 auto",
+    display: "flex",
+    alignItems: "center",
+    gap: "16px",
+  },
+  logo: { height: 40, width: "auto", display: "block" },
+  h1: {
+    fontSize: 24,
+    fontWeight: 700,
+    color: "#1a202c",
+    margin: 0,
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
+  },
+  pDesc: {
+    marginTop: 4,
+    color: "#64748b",
+    fontSize: "14px",
+    fontWeight: 500,
+  },
 
   shell: { flex: 1, overflow: "hidden" },
   shellInner: {
@@ -55,99 +78,145 @@ const styles = {
   },
   scrollPad: { padding: 24, height: "100%" },
 
-  rowBase: { display: "flex", alignItems: "flex-end", gap: 12 },
+  rowBase: {
+    display: "flex",
+    alignItems: "flex-end",
+    gap: 16,
+    marginBottom: "20px",
+    animation: "slideInUp 0.6s ease-out",
+  },
   rowLeft: { justifyContent: "flex-start" },
   rowRight: { justifyContent: "flex-end" },
 
   avatarBot: {
-    width: 32,
-    height: 32,
-    borderRadius: 9999,
-    background: "#2563eb",
+    width: 40,
+    height: 40,
+    borderRadius: "12px",
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
     color: "white",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
+    boxShadow: "0 8px 25px rgba(102, 126, 234, 0.4)",
+    border: "2px solid rgba(255,255,255,0.2)",
   },
   avatarUser: {
-    width: 32,
-    height: 32,
-    borderRadius: 9999,
-    background: "#4b5563",
+    width: 40,
+    height: 40,
+    borderRadius: "12px",
+    background: "linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)",
     color: "white",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
+    boxShadow: "0 8px 25px rgba(79, 70, 229, 0.4)",
+    border: "2px solid rgba(255,255,255,0.2)",
   },
 
   bubble: {
     maxWidth: 560,
-    padding: "10px 14px",
-    borderRadius: 16,
-    boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+    padding: "16px 20px",
+    borderRadius: "20px",
+    boxShadow: "0 8px 25px rgba(0,0,0,0.1)",
+    position: "relative",
+    fontSize: "15px",
+    lineHeight: "1.6",
+    fontWeight: 500,
   },
   bubbleBot: {
-    background: "#ffffff",
-    color: "#111827",
-    border: "1px solid #e5e7eb",
-    borderBottomLeftRadius: 6,
+    background: "rgba(255,255,255,0.95)",
+    color: "#2d3748",
+    border: "1px solid rgba(255,255,255,0.3)",
+    borderBottomLeftRadius: 8,
+    backdropFilter: "blur(20px)",
   },
   bubbleUser: {
-    background: "#2563eb",
+    background: "linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)",
     color: "white",
-    borderBottomRightRadius: 6,
+    borderBottomRightRadius: 8,
+    border: "1px solid rgba(255,255,255,0.2)",
   },
 
   card: {
-    background: "#ffffff",
-    borderRadius: 16,
-    padding: 24,
-    border: "1px solid #e5e7eb",
-    boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+    background: "rgba(255,255,255,0.95)",
+    borderRadius: "20px",
+    padding: "24px",
+    border: "1px solid rgba(255,255,255,0.3)",
+    boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
     maxWidth: 640,
+    backdropFilter: "blur(20px)",
+    position: "relative",
   },
 
   inputBar: {
-    background: "rgba(255,255,255,0.8)",
-    backdropFilter: "blur(6px)",
-    borderTop: "1px solid #e5e7eb",
-    padding: "12px 16px",
+    background: "rgba(255,255,255,0.95)",
+    backdropFilter: "blur(20px)",
+    borderTop: "1px solid rgba(255,255,255,0.2)",
+    padding: "20px 24px",
+    boxShadow: "0 -8px 32px rgba(0,0,0,0.1)",
   },
-  inputInner: { display: "flex", alignItems: "center", gap: 12 },
+  inputInner: {
+    display: "flex",
+    alignItems: "center",
+    gap: 16,
+    maxWidth: 1024,
+    margin: "0 auto",
+  },
   input: {
     fontSize: 16,
-    border: "2px solid #e5e7eb",
+    border: "2px solid rgba(255,255,255,0.3)",
     outline: "none",
     paddingRight: 48,
-    height: 48,
-    borderRadius: 12,
+    height: 56,
+    borderRadius: 16,
     width: "100%",
+    background: "rgba(255,255,255,0.9)",
+    backdropFilter: "blur(10px)",
+    transition: "all 0.3s ease",
+    fontWeight: 500,
   },
-  inputFocus: { borderColor: "#3b82f6" },
-  sendBtn: { height: 48, width: 48, borderRadius: 12, background: "#2563eb" },
+  inputFocus: {
+    borderColor: "#667eea",
+    boxShadow: "0 0 0 4px rgba(102, 126, 234, 0.1)",
+    background: "rgba(255,255,255,1)",
+  },
+  sendBtn: {
+    height: 56,
+    width: 56,
+    borderRadius: 16,
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    border: "none",
+    boxShadow: "0 8px 25px rgba(102, 126, 234, 0.4)",
+    transition: "all 0.3s ease",
+    cursor: "pointer",
+  },
 
   typingWrap: {
     display: "flex",
     alignItems: "flex-end",
-    gap: 12,
+    gap: 16,
     justifyContent: "flex-start",
+    marginBottom: "20px",
   },
   typingBubble: {
-    background: "#f3f4f6",
-    borderRadius: 16,
-    borderBottomLeftRadius: 6,
-    padding: "10px 14px",
+    background: "rgba(255,255,255,0.9)",
+    borderRadius: "20px",
+    borderBottomLeftRadius: 8,
+    padding: "16px 20px",
+    backdropFilter: "blur(20px)",
+    border: "1px solid rgba(255,255,255,0.3)",
+    boxShadow: "0 8px 25px rgba(0,0,0,0.1)",
   },
   dot: {
     width: 8,
     height: 8,
-    background: "#9ca3af",
+    background: "#94a3b8",
     borderRadius: 9999,
     display: "inline-block",
-    marginRight: 4,
-    animation: "bounce 1s infinite ease-in-out",
+    marginRight: 6,
+    animation: "typingBounce 1.4s infinite ease-in-out",
   },
 
   loadingPage: {
@@ -155,34 +224,38 @@ const styles = {
     height: "100vh",
     alignItems: "center",
     justifyContent: "center",
-    background: "linear-gradient(135deg,#eff6ff,#e0e7ff)",
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
   },
   center: { textAlign: "center" },
   successBox: {
-    background: "#ecfdf5",
-    border: "1px solid #a7f3d0",
-    borderRadius: 16,
-    padding: 24,
+    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    border: "1px solid rgba(255,255,255,0.2)",
+    borderRadius: "20px",
+    padding: "32px",
     textAlign: "center",
     maxWidth: 480,
+    color: "white",
+    boxShadow: "0 20px 40px rgba(16, 185, 129, 0.3)",
   },
 
-  fieldSpace: { marginTop: 12 },
-  sectionSpace: { display: "grid", gap: 12 },
-  subtle: { color: "#6b7280", fontSize: 14 },
+  fieldSpace: { marginTop: 16 },
+  sectionSpace: { display: "grid", gap: 16 },
+  subtle: { color: "#64748b", fontSize: 14, fontWeight: 500 },
 
   dashedDrop: {
-    border: "2px dashed #d1d5db",
-    borderRadius: 12,
-    padding: 24,
+    border: "2px dashed rgba(102, 126, 234, 0.3)",
+    borderRadius: 16,
+    padding: 32,
     textAlign: "center",
+    background: "rgba(102, 126, 234, 0.05)",
+    transition: "all 0.3s ease",
   },
-  blueText: { color: "#2563eb" },
-  errorText: { color: "#ef4444", fontSize: 13, marginTop: 6 },
+  blueText: { color: "#667eea", fontWeight: 600 },
+  errorText: { color: "#ef4444", fontSize: 13, marginTop: 8, fontWeight: 500 },
 };
 
 function validateField(field, response) {
-  let value = response;
+  const value = response;
 
   if (
     field.required &&
@@ -198,25 +271,47 @@ function validateField(field, response) {
       switch (rule.type) {
         case "min":
           if (typeof value === "string" && value.length < rule.value)
-            return { valid: false, message: rule.message };
+            return {
+              valid: false,
+              message: `Minimum ${rule.value} characters required.`,
+            };
           if (typeof value === "number" && value < rule.value)
-            return { valid: false, message: rule.message };
+            return {
+              valid: false,
+              message: `Minimum value is ${rule.value}.`,
+            };
           break;
         case "max":
           if (typeof value === "string" && value.length > rule.value)
-            return { valid: false, message: rule.message };
+            return {
+              valid: false,
+              message: `Maximum ${rule.value} characters allowed.`,
+            };
           if (typeof value === "number" && value > rule.value)
-            return { valid: false, message: rule.message };
+            return {
+              valid: false,
+              message: `Maximum value is ${rule.value}.`,
+            };
           break;
-        case "pattern":
-          if (
-            typeof value === "string" &&
-            !new RegExp(rule.value).test(value)
-          ) {
-            return { valid: false, message: rule.message };
+        case "email":
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value))
+            return { valid: false, message: "Please enter a valid email." };
+          break;
+        case "url":
+          try {
+            new URL(value);
+          } catch {
+            return { valid: false, message: "Please enter a valid URL." };
           }
           break;
-        default:
+        case "regex":
+          const regex = new RegExp(rule.pattern);
+          if (!regex.test(value))
+            return {
+              valid: false,
+              message: rule.message || "Invalid format.",
+            };
           break;
       }
     }
@@ -225,293 +320,318 @@ function validateField(field, response) {
   return { valid: true, value };
 }
 
-function FieldRenderer({ field, onSubmit }) {
-  const [localValue, setLocalValue] = useState(
-    field.type === "checkbox" ? [] : ""
-  );
-  const [touched, setTouched] = useState(false);
-
-  const v = validateField(field, localValue);
-  const validationError = touched && !v.valid ? v.message : null;
-
-  const handleChange = (value) => {
-    setLocalValue(value);
-    setTouched(true);
-  };
-
-  const handleSubmit = () => {
-    if (validateField(field, localValue).valid) onSubmit(localValue);
-  };
-
-  // Shared button style via Button component
-  const buttonStyle = { width: "100%", background: "#2563eb" };
-
-  // MATRIX helpers (used in a case)
-  const renderMatrix = () => {
-    const matrixRows = field.matrixRows || ["Row 1", "Row 2", "Row 3"];
-    const matrixColumns = field.matrixColumns || ["1", "2", "3", "4", "5"];
-    const matrixValue = localValue || {};
-
-    return (
-      <div style={{ display: "grid", gap: 12 }}>
-        <div
-          style={{
-            border: "1px solid #e5e7eb",
-            borderRadius: 12,
-            overflowX: "auto",
-            background: "#fff",
-          }}
-        >
-          <table style={{ width: "100%", fontSize: 14 }}>
-            <thead>
-              <tr>
-                <th
-                  style={{
-                    textAlign: "left",
-                    padding: 16,
-                    borderBottom: "1px solid #e5e7eb",
-                    background: "#f9fafb",
-                  }}
-                ></th>
-                {matrixColumns.map((col, index) => (
-                  <th
-                    key={index}
-                    style={{
-                      textAlign: "center",
-                      padding: 16,
-                      borderBottom: "1px solid #e5e7eb",
-                      color: "#374151",
-                      minWidth: 72,
-                      background: "#f9fafb",
-                    }}
-                  >
-                    {col}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {matrixRows.map((row, rowIndex) => (
-                <tr
-                  key={rowIndex}
-                  style={{ borderBottom: "1px solid #f3f4f6" }}
-                >
-                  <td
-                    style={{
-                      padding: 16,
-                      fontWeight: 600,
-                      color: "#374151",
-                      background: "#f9fafb",
-                      minWidth: 192,
-                      borderRight: "1px solid #e5e7eb",
-                    }}
-                  >
-                    {row}
-                  </td>
-                  <RadioGroup
-                    value={matrixValue[`${rowIndex}`] || ""}
-                    onValueChange={(val) => {
-                      const newValue = {
-                        ...(matrixValue || {}),
-                        [`${rowIndex}`]: val,
-                      };
-                      handleChange(newValue);
-                    }}
-                    className="contents"
-                  >
-                    {matrixColumns.map((_, colIndex) => (
-                      <td
-                        key={colIndex}
-                        style={{ textAlign: "center", padding: 16 }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <RadioGroupItem
-                            value={`${colIndex + 1}`}
-                            id={`${field.id}-${rowIndex}-${colIndex}`}
-                            className="w-5 h-5 cursor-pointer"
-                          />
-                        </div>
-                      </td>
-                    ))}
-                  </RadioGroup>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {validationError && <p style={styles.errorText}>{validationError}</p>}
-
-        <div style={{ width: 80, marginLeft: "auto" }}>
-          <Button
-            onClick={handleSubmit}
-            style={buttonStyle}
-            disabled={!!validationError}
-          >
-            Submit
-          </Button>
+function TypingIndicator() {
+  return (
+    <div style={styles.typingWrap}>
+      <div style={styles.avatarBot}>
+        <BotIcon style={{ width: 20, height: 20 }} />
+      </div>
+      <div style={styles.typingBubble}>
+        <div style={{ display: "flex", alignItems: "center", gap: "2px" }}>
+          <div style={{ ...styles.dot, animationDelay: "0ms" }}></div>
+          <div style={{ ...styles.dot, animationDelay: "200ms" }}></div>
+          <div style={{ ...styles.dot, animationDelay: "400ms" }}></div>
         </div>
       </div>
-    );
+    </div>
+  );
+}
+
+function FieldRenderer({ field, onSubmit }) {
+  const [value, setValue] = useState(
+    field.type === "checkbox" ? [] : field.defaultValue || ""
+  );
+  const [error, setError] = useState("");
+  const [date, setDate] = useState();
+
+  const handleSubmit = () => {
+    let submitValue = value;
+    if (field.type === "date" && date) {
+      submitValue = format(date, "yyyy-MM-dd");
+    }
+
+    const validation = validateField(field, submitValue);
+    if (!validation.valid) {
+      setError(validation.message);
+      return;
+    }
+
+    setError("");
+    onSubmit(validation.value);
   };
 
-  // Render by field.type
+  const fieldStyles = {
+    container: {
+      animation: "fadeInUp 0.5s ease-out",
+    },
+    button: {
+      marginTop: "20px",
+      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      color: "white",
+      border: "none",
+      borderRadius: "12px",
+      padding: "12px 24px",
+      fontSize: "14px",
+      fontWeight: 600,
+      cursor: "pointer",
+      transition: "all 0.3s ease",
+      boxShadow: "0 4px 15px rgba(102, 126, 234, 0.3)",
+    },
+  };
+
   switch (field.type) {
-    case "password":
-    case "url":
     case "text":
     case "email":
+    case "url":
     case "number":
+    case "password":
       return (
-        <div style={styles.sectionSpace}>
+        <div style={fieldStyles.container}>
           <Input
             type={field.type}
-            value={localValue}
-            onChange={(e) => handleChange(e.target.value)}
-            placeholder={
-              field.placeholder ||
-              `Enter ${String(field.label || "").toLowerCase()}`
-            }
-            required={!!field.required}
-            autoFocus
-            style={{ ...styles.input, height: 44 }}
+            placeholder={field.placeholder}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            style={{
+              marginBottom: "16px",
+              borderRadius: "12px",
+              border: "2px solid #e2e8f0",
+              padding: "12px 16px",
+              fontSize: "15px",
+              transition: "all 0.3s ease",
+              background: "rgba(255,255,255,0.9)",
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = "#667eea";
+              e.target.style.boxShadow = "0 0 0 3px rgba(102, 126, 234, 0.1)";
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = "#e2e8f0";
+              e.target.style.boxShadow = "none";
+            }}
           />
-          {validationError && <p style={styles.errorText}>{validationError}</p>}
+          {error && <p style={styles.errorText}>{error}</p>}
           <Button
             onClick={handleSubmit}
-            style={buttonStyle}
-            disabled={!!validationError}
+            style={fieldStyles.button}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-2px)";
+              e.target.style.boxShadow = "0 8px 25px rgba(102, 126, 234, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
+            }}
           >
-            Continue
+            Submit Answer
           </Button>
         </div>
       );
 
     case "textarea":
       return (
-        <div style={styles.sectionSpace}>
+        <div style={fieldStyles.container}>
           <textarea
-            value={localValue}
-            onChange={(e) => handleChange(e.target.value)}
-            placeholder={
-              field.placeholder ||
-              `Enter ${String(field.label || "").toLowerCase()}`
-            }
-            rows={5}
+            placeholder={field.placeholder}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            rows={4}
             style={{
-              ...styles.input,
-              height: "auto",
-              padding: 12,
+              width: "100%",
+              marginBottom: "16px",
+              borderRadius: "12px",
+              border: "2px solid #e2e8f0",
+              padding: "12px 16px",
+              fontSize: "15px",
+              fontFamily: "inherit",
               resize: "vertical",
+              transition: "all 0.3s ease",
+              background: "rgba(255,255,255,0.9)",
+              outline: "none",
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = "#667eea";
+              e.target.style.boxShadow = "0 0 0 3px rgba(102, 126, 234, 0.1)";
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = "#e2e8f0";
+              e.target.style.boxShadow = "none";
             }}
           />
-          {validationError && <p style={styles.errorText}>{validationError}</p>}
+          {error && <p style={styles.errorText}>{error}</p>}
           <Button
             onClick={handleSubmit}
-            style={buttonStyle}
-            disabled={!!validationError}
+            style={fieldStyles.button}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-2px)";
+              e.target.style.boxShadow = "0 8px 25px rgba(102, 126, 234, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
+            }}
           >
-            Continue
-          </Button>
-        </div>
-      );
-
-    case "radio":
-      return (
-        <RadioGroup
-          value={localValue}
-          onValueChange={(val) => onSubmit(val)}
-          style={{ display: "grid", gap: 12 }}
-        >
-          {(field.options || []).map((option) => (
-            <Label
-              key={option}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 12,
-                padding: 16,
-                border: "2px solid #e5e7eb",
-                borderRadius: 12,
-                cursor: "pointer",
-              }}
-            >
-              <RadioGroupItem value={option} id={`${field.id}-${option}`} />
-              <span style={{ fontSize: 16 }}>{option}</span>
-            </Label>
-          ))}
-        </RadioGroup>
-      );
-
-    case "checkbox":
-      return (
-        <div style={{ display: "grid", gap: 16 }}>
-          <div style={{ display: "grid", gap: 12 }}>
-            {(field.options || []).map((option) => (
-              <Label
-                key={option}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  padding: 16,
-                  border: "2px solid #e5e7eb",
-                  borderRadius: 12,
-                  cursor: "pointer",
-                }}
-              >
-                <Checkbox
-                  id={`${field.id}-${option}`}
-                  checked={(localValue || []).includes(option)}
-                  onCheckedChange={(checked) => {
-                    const arr = Array.isArray(localValue) ? localValue : [];
-                    const newValue = checked
-                      ? [...arr, option]
-                      : arr.filter((v) => v !== option);
-                    setLocalValue(newValue);
-                  }}
-                />
-                <span style={{ fontSize: 16 }}>{option}</span>
-              </Label>
-            ))}
-          </div>
-          <Button onClick={() => onSubmit(localValue)} style={buttonStyle}>
-            Continue
+            Submit Answer
           </Button>
         </div>
       );
 
     case "select":
       return (
-        <Select onValueChange={(val) => onSubmit(val)}>
-          <SelectTrigger
-            style={{ fontSize: 16, border: "2px solid #e5e7eb", height: 48 }}
+        <div style={fieldStyles.container}>
+          <Select value={value} onValueChange={setValue}>
+            <SelectTrigger
+              style={{
+                marginBottom: "16px",
+                borderRadius: "12px",
+                border: "2px solid #e2e8f0",
+                padding: "12px 16px",
+                fontSize: "15px",
+                transition: "all 0.3s ease",
+                background: "rgba(255,255,255,0.9)",
+              }}
+            >
+              <SelectValue placeholder={field.placeholder} />
+            </SelectTrigger>
+            <SelectContent>
+              {field.options?.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {error && <p style={styles.errorText}>{error}</p>}
+          <Button
+            onClick={handleSubmit}
+            style={fieldStyles.button}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-2px)";
+              e.target.style.boxShadow = "0 8px 25px rgba(102, 126, 234, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
+            }}
           >
-            <SelectValue placeholder="Choose an option" />
-          </SelectTrigger>
-          <SelectContent>
-            {(field.options || []).map((option) => (
-              <SelectItem
-                key={option}
-                value={option}
-                className="text-base py-3"
+            Submit Answer
+          </Button>
+        </div>
+      );
+
+    case "radio":
+      return (
+        <div style={fieldStyles.container}>
+          <RadioGroup
+            value={value}
+            onValueChange={setValue}
+            style={{ marginBottom: "16px" }}
+          >
+            {field.options?.map((option) => (
+              <div
+                key={option.value}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  padding: "8px 0",
+                  transition: "all 0.2s ease",
+                }}
               >
-                {option}
-              </SelectItem>
+                <RadioGroupItem value={option.value} id={option.value} />
+                <Label
+                  htmlFor={option.value}
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: 500,
+                    cursor: "pointer",
+                    color: "#374151",
+                  }}
+                >
+                  {option.label}
+                </Label>
+              </div>
             ))}
-          </SelectContent>
-        </Select>
+          </RadioGroup>
+          {error && <p style={styles.errorText}>{error}</p>}
+          <Button
+            onClick={handleSubmit}
+            style={fieldStyles.button}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-2px)";
+              e.target.style.boxShadow = "0 8px 25px rgba(102, 126, 234, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
+            }}
+          >
+            Submit Answer
+          </Button>
+        </div>
+      );
+
+    case "checkbox":
+      return (
+        <div style={fieldStyles.container}>
+          <div style={{ marginBottom: "16px" }}>
+            {field.options?.map((option) => (
+              <div
+                key={option.value}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  padding: "8px 0",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                <Checkbox
+                  checked={value.includes(option.value)}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setValue([...value, option.value]);
+                    } else {
+                      setValue(value.filter((v) => v !== option.value));
+                    }
+                  }}
+                  id={option.value}
+                />
+                <Label
+                  htmlFor={option.value}
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: 500,
+                    cursor: "pointer",
+                    color: "#374151",
+                  }}
+                >
+                  {option.label}
+                </Label>
+              </div>
+            ))}
+          </div>
+          {error && <p style={styles.errorText}>{error}</p>}
+          <Button
+            onClick={handleSubmit}
+            style={fieldStyles.button}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-2px)";
+              e.target.style.boxShadow = "0 8px 25px rgba(102, 126, 234, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
+            }}
+          >
+            Submit Answer
+          </Button>
+        </div>
       );
 
     case "date":
       return (
-        <div style={styles.sectionSpace}>
+        <div style={fieldStyles.container}>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -520,178 +640,237 @@ function FieldRenderer({ field, onSubmit }) {
                   width: "100%",
                   justifyContent: "flex-start",
                   textAlign: "left",
-                  fontSize: 16,
-                  height: 48,
-                  border:
-                    "2px solid " + (validationError ? "#f87171" : "#e5e7eb"),
+                  marginBottom: "16px",
+                  borderRadius: "12px",
+                  border: "2px solid #e2e8f0",
+                  padding: "12px 16px",
+                  fontSize: "15px",
+                  background: "rgba(255,255,255,0.9)",
+                  color: date ? "#374151" : "#9ca3af",
+                  fontWeight: 500,
                 }}
-                onClick={() => setTouched(true)}
               >
                 <CalendarIcon
-                  style={{ marginRight: 12, width: 20, height: 20 }}
+                  style={{ marginRight: 8, height: 16, width: 16 }}
                 />
-                {localValue
-                  ? format(new Date(localValue), "PPP")
-                  : "Pick a date"}
+                {date
+                  ? format(date, "PPP")
+                  : field.placeholder || "Pick a date"}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent style={{ width: "auto", padding: 0 }}>
               <Calendar
                 mode="single"
-                selected={localValue ? new Date(localValue) : undefined}
-                onSelect={(date) => {
-                  const val = date?.toISOString();
-                  handleChange(val);
-                  onSubmit(val);
-                }}
+                selected={date}
+                onSelect={setDate}
                 initialFocus
               />
             </PopoverContent>
           </Popover>
-          {validationError && <p style={styles.errorText}>{validationError}</p>}
+          {error && <p style={styles.errorText}>{error}</p>}
+          <Button
+            onClick={handleSubmit}
+            style={fieldStyles.button}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-2px)";
+              e.target.style.boxShadow = "0 8px 25px rgba(102, 126, 234, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
+            }}
+          >
+            Submit Answer
+          </Button>
         </div>
       );
 
     case "rating":
       return (
-        <div style={styles.sectionSpace}>
-          <div style={{ display: "flex", justifyContent: "center", gap: 8 }}>
+        <div style={fieldStyles.container}>
+          <div
+            style={{
+              display: "flex",
+              gap: "8px",
+              marginBottom: "16px",
+              justifyContent: "center",
+            }}
+          >
             {[1, 2, 3, 4, 5].map((star) => (
               <StarIcon
                 key={star}
-                className="cf-star"
                 style={{
-                  width: 40,
-                  height: 40,
+                  height: 32,
+                  width: 32,
                   cursor: "pointer",
-                  color: star <= (localValue || 0) ? "#f59e0b" : "#d1d5db",
+                  color: star <= value ? "#fbbf24" : "#d1d5db",
+                  fill: star <= value ? "#fbbf24" : "transparent",
+                  transition: "all 0.2s ease",
                 }}
-                onClick={() => {
-                  handleChange(star);
-                  onSubmit(star);
+                onClick={() => setValue(star)}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = "scale(1.1)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = "scale(1)";
                 }}
               />
             ))}
           </div>
-          {localValue > 0 && (
-            <p style={{ textAlign: "center", fontSize: 14, color: "#6b7280" }}>
-              You rated {localValue} out of 5 stars
-            </p>
-          )}
+          {error && <p style={styles.errorText}>{error}</p>}
+          <Button
+            onClick={handleSubmit}
+            style={fieldStyles.button}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-2px)";
+              e.target.style.boxShadow = "0 8px 25px rgba(102, 126, 234, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
+            }}
+          >
+            Submit Answer
+          </Button>
         </div>
       );
 
-    case "slider":
+    case "range":
       return (
-        <div style={styles.sectionSpace}>
-          <Slider
-            value={[localValue || 0]}
-            onValueChange={(val) => handleChange(val[0])}
-            min={0}
-            max={100}
-            step={1}
-          />
-          <div style={{ textAlign: "center" }}>
-            <span style={{ fontSize: 24, fontWeight: 700, color: "#2563eb" }}>
-              {localValue || 0}
-            </span>
-            <span style={{ color: "#6b7280", marginLeft: 4 }}>/ 100</span>
+        <div style={fieldStyles.container}>
+          <div style={{ marginBottom: "16px" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "12px",
+                fontSize: "14px",
+                color: "#64748b",
+                fontWeight: 500,
+              }}
+            >
+              <span>{field.min || 0}</span>
+              <span
+                style={{
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  color: "#374151",
+                }}
+              >
+                {value || field.min || 0}
+              </span>
+              <span>{field.max || 100}</span>
+            </div>
+            <Slider
+              value={[value || field.min || 0]}
+              onValueChange={(newValue) => setValue(newValue[0])}
+              max={field.max || 100}
+              min={field.min || 0}
+              step={field.step || 1}
+            />
           </div>
+          {error && <p style={styles.errorText}>{error}</p>}
           <Button
             onClick={handleSubmit}
-            style={buttonStyle}
-            disabled={!!validationError}
+            style={fieldStyles.button}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-2px)";
+              e.target.style.boxShadow = "0 8px 25px rgba(102, 126, 234, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
+            }}
           >
-            Continue
+            Submit Answer
           </Button>
         </div>
       );
 
     case "file":
       return (
-        <div style={styles.sectionSpace}>
-          <div style={{ ...styles.dashedDrop }}>
+        <div style={fieldStyles.container}>
+          <div
+            style={{
+              ...styles.dashedDrop,
+              marginBottom: "16px",
+            }}
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.currentTarget.style.borderColor = "#667eea";
+              e.currentTarget.style.background = "rgba(102, 126, 234, 0.1)";
+            }}
+            onDragLeave={(e) => {
+              e.currentTarget.style.borderColor = "rgba(102, 126, 234, 0.3)";
+              e.currentTarget.style.background = "rgba(102, 126, 234, 0.05)";
+            }}
+          >
             <UploadIcon
               style={{
-                width: 48,
                 height: 48,
-                color: "#9ca3af",
-                margin: "0 auto 12px",
+                width: 48,
+                color: "#667eea",
+                margin: "0 auto 16px",
               }}
             />
             <p
               style={{
-                fontSize: 18,
+                margin: "0 0 8px",
                 fontWeight: 600,
-                color: "#111827",
-                marginBottom: 8,
+                color: "#374151",
               }}
             >
-              Drop your file here or click to browse
+              Drop files here or click to browse
             </p>
-            <p style={{ color: "#6b7280" }}>SVG, PNG, JPG or GIF (max. 10MB)</p>
-            <input
+            <p
+              style={{
+                margin: 0,
+                fontSize: "14px",
+                color: "#64748b",
+              }}
+            >
+              {field.placeholder || "Select files to upload"}
+            </p>
+            <Input
               type="file"
-              id="file-input"
-              style={{ display: "none" }}
-              onChange={(e) => {
-                const file = e.target.files && e.target.files[0];
-                if (file) handleChange(file.name);
+              multiple={field.multiple}
+              accept={field.accept}
+              onChange={(e) => setValue(e.target.files)}
+              style={{
+                position: "absolute",
+                inset: 0,
+                opacity: 0,
+                cursor: "pointer",
               }}
             />
-            <label
-              htmlFor="file-input"
-              style={{
-                cursor: "pointer",
-                display: "inline-block",
-                marginTop: 16,
-              }}
-            >
-              <span
-                style={{
-                  display: "inline-block",
-                  padding: "10px 16px",
-                  background: "#2563eb",
-                  color: "#fff",
-                  borderRadius: 8,
-                }}
-              >
-                Select File
-              </span>
-            </label>
           </div>
-          {validationError && <p style={styles.errorText}>{validationError}</p>}
+          {error && <p style={styles.errorText}>{error}</p>}
           <Button
             onClick={handleSubmit}
-            style={buttonStyle}
-            disabled={!!validationError}
+            style={fieldStyles.button}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-2px)";
+              e.target.style.boxShadow = "0 8px 25px rgba(102, 126, 234, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
+            }}
           >
-            Continue
+            Submit Answer
           </Button>
         </div>
       );
 
-    case "matrix":
-      return renderMatrix();
-
     default:
-      return null;
+      return (
+        <div style={fieldStyles.container}>
+          <p style={{ color: "#ef4444", fontWeight: 500 }}>
+            Unsupported field type: {field.type}
+          </p>
+        </div>
+      );
   }
-}
-
-function TypingIndicator() {
-  return (
-    <div style={styles.typingWrap}>
-      <div style={styles.avatarBot}>
-        <BotIcon style={{ width: 16, height: 16 }} />
-      </div>
-      <div style={styles.typingBubble}>
-        <span style={{ ...styles.dot, animationDelay: "0s" }} />
-        <span style={{ ...styles.dot, animationDelay: "0.1s" }} />
-        <span style={{ ...styles.dot, animationDelay: "0.2s" }} />
-      </div>
-    </div>
-  );
 }
 
 export default function App() {
@@ -1045,18 +1224,29 @@ export default function App() {
   return (
     <>
       <style>{`
-        @keyframes typing {
+        @keyframes typingBounce {
           0%, 60%, 100% {
             transform: translateY(0);
             opacity: 0.4;
           }
           30% {
-            transform: translateY(-10px);
+            transform: translateY(-12px);
             opacity: 1;
           }
         }
         
-        @keyframes slideUp {
+        @keyframes slideInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes fadeInUp {
           from {
             opacity: 0;
             transform: translateY(20px);
@@ -1077,7 +1267,7 @@ export default function App() {
         }
         
         .message-enter {
-          animation: slideUp 0.3s ease-out;
+          animation: slideInUp 0.5s ease-out;
         }
         
         .chat-window::-webkit-scrollbar {
@@ -1085,17 +1275,31 @@ export default function App() {
         }
         
         .chat-window::-webkit-scrollbar-track {
-          background: #f1f5f9;
+          background: rgba(241, 245, 249, 0.5);
           border-radius: 3px;
         }
         
         .chat-window::-webkit-scrollbar-thumb {
-          background: #cbd5e1;
+          background: rgba(203, 213, 225, 0.8);
           border-radius: 3px;
         }
         
         .chat-window::-webkit-scrollbar-thumb:hover {
-          background: #94a3b8;
+          background: rgba(148, 163, 184, 0.9);
+        }
+
+        /* Background decoration */
+        .bg-decoration {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image: 
+            radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
+          pointer-events: none;
         }
       `}</style>
 
@@ -1103,37 +1307,42 @@ export default function App() {
       <div
         style={{
           position: "fixed",
-          bottom: "80px",
-          right: "16px",
-          width: "380px",
-          height: "500px",
-          backgroundColor: "#ffffff",
-          border: "1px solid #e2e8f0",
-          borderRadius: "16px",
+          bottom: "90px",
+          right: "20px",
+          width: "420px",
+          height: "600px",
+          backgroundColor: "rgba(255,255,255,0.95)",
+          border: "1px solid rgba(255,255,255,0.3)",
+          borderRadius: "24px",
           boxShadow:
-            "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05)",
-          transition: "all 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+            "0 32px 64px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1)",
+          transition: "all 400ms cubic-bezier(0.4, 0, 0.2, 1)",
           zIndex: 50,
           display: "flex",
           flexDirection: "column",
           opacity: isOpen ? 1 : 0,
           transform: isOpen
             ? "scale(1) translateY(0)"
-            : "scale(0.95) translateY(10px)",
+            : "scale(0.9) translateY(20px)",
           pointerEvents: isOpen ? "auto" : "none",
           fontFamily: "system-ui, -apple-system, sans-serif",
+          backdropFilter: "blur(20px)",
+          overflow: "hidden",
         }}
       >
+        {/* Background decoration */}
+        <div className="bg-decoration"></div>
+
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: "20px",
+            padding: "24px",
             background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
             color: "#ffffff",
-            borderTopLeftRadius: "16px",
-            borderTopRightRadius: "16px",
+            borderTopLeftRadius: "24px",
+            borderTopRightRadius: "24px",
             position: "relative",
             overflow: "hidden",
           }}
@@ -1146,7 +1355,7 @@ export default function App() {
               right: 0,
               bottom: 0,
               backgroundImage:
-                "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%)",
               pointerEvents: "none",
             }}
           ></div>
@@ -1155,16 +1364,16 @@ export default function App() {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "12px",
+              gap: "16px",
               position: "relative",
             }}
           >
             <div
               style={{
-                width: "36px",
-                height: "36px",
+                width: "44px",
+                height: "44px",
                 backgroundColor: "rgba(255, 255, 255, 0.2)",
-                borderRadius: "8px",
+                borderRadius: "12px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -1176,8 +1385,8 @@ export default function App() {
                 src="https://tse1.mm.bing.net/th/id/OIP.62xhYrRo3ea-St_vraobugHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"
                 alt="Gateway Logo"
                 style={{
-                  width: "36px",
-                  height: "36px",
+                  width: "46px",
+                  height: "46px",
                   backgroundColor: "rgba(255, 255, 255, 0.2)",
                   borderRadius: "8px",
                   display: "flex",
@@ -1192,9 +1401,9 @@ export default function App() {
               <h3
                 style={{
                   margin: 0,
-                  fontWeight: "600",
-                  fontSize: "18px",
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.1)",
+                  fontWeight: "700",
+                  fontSize: "20px",
+                  textShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 }}
               >
                 {form.title || "Gateway AI"}
@@ -1202,12 +1411,12 @@ export default function App() {
               <p
                 style={{
                   margin: 0,
-                  fontSize: "12px",
+                  fontSize: "13px",
                   opacity: 0.9,
-                  fontWeight: "400",
+                  fontWeight: "500",
                 }}
               >
-                {form.description || "Gateway AI • Online • Ready to help"}
+                {form.description || "AI Assistant • Online • Ready to help"}
               </p>
             </div>
           </div>
@@ -1217,8 +1426,8 @@ export default function App() {
             style={{
               backgroundColor: "rgba(255, 255, 255, 0.2)",
               border: "none",
-              borderRadius: "8px",
-              padding: "8px",
+              borderRadius: "10px",
+              padding: "10px",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
@@ -1239,8 +1448,8 @@ export default function App() {
             }}
           >
             <svg
-              width="18"
-              height="18"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -1252,11 +1461,13 @@ export default function App() {
         </div>
 
         <div
+          className="chat-window"
           style={{
             flex: 1,
             overflowY: "auto",
-            padding: "20px",
-            background: "linear-gradient(to bottom, #f8fafc 0%, #f1f5f9 100%)",
+            padding: "24px",
+            background:
+              "linear-gradient(to bottom, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.8) 100%)",
             position: "relative",
           }}
         >
@@ -1264,20 +1475,22 @@ export default function App() {
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "16px",
+              gap: "20px",
             }}
           >
             {conversation.map((msg, index) => (
               <div
                 key={index}
+                className="message-enter"
                 style={{
                   ...styles.rowBase,
                   ...(msg.role === "user" ? styles.rowRight : styles.rowLeft),
+                  animationDelay: `${index * 0.1}s`,
                 }}
               >
                 {msg.role === "system" && (
                   <div style={styles.avatarBot}>
-                    <BotIcon style={{ width: 16, height: 16 }} />
+                    <BotIcon style={{ width: 20, height: 20 }} />
                   </div>
                 )}
 
@@ -1291,10 +1504,11 @@ export default function App() {
                 >
                   <p
                     style={{
-                      fontSize: 14,
-                      lineHeight: 1.5,
+                      fontSize: 15,
+                      lineHeight: 1.6,
                       whiteSpace: "pre-wrap",
                       margin: 0,
+                      fontWeight: 500,
                     }}
                   >
                     {msg.content}
@@ -1303,23 +1517,27 @@ export default function App() {
 
                 {msg.role === "user" && (
                   <div style={styles.avatarUser}>
-                    <UserIcon style={{ width: 16, height: 16 }} />
+                    <UserIcon style={{ width: 20, height: 20 }} />
                   </div>
                 )}
               </div>
             ))}
 
             {activeField && !isAiChatMode && !isTyping && (
-              <div style={{ ...styles.rowBase, ...styles.rowLeft }}>
+              <div
+                className="message-enter"
+                style={{ ...styles.rowBase, ...styles.rowLeft }}
+              >
                 <div style={styles.avatarBot}>
-                  <BotIcon style={{ width: 16, height: 16 }} />
+                  <BotIcon style={{ width: 20, height: 20 }} />
                 </div>
                 <div style={styles.card}>
                   <p
                     style={{
-                      fontWeight: 600,
-                      margin: "0 0 12px",
-                      color: "#111827",
+                      fontWeight: 700,
+                      margin: "0 0 16px",
+                      color: "#1a202c",
+                      fontSize: "16px",
                     }}
                   >
                     {activeField.label}
@@ -1342,27 +1560,39 @@ export default function App() {
             )}
 
             {isSubmitted && (
-              <div style={{ display: "flex", justifyContent: "center" }}>
+              <div
+                className="message-enter"
+                style={{ display: "flex", justifyContent: "center" }}
+              >
                 <div style={styles.successBox}>
                   <CheckCircleIcon
                     style={{
-                      width: 48,
-                      height: 48,
-                      color: "#059669",
-                      margin: "0 auto 12px",
+                      width: 56,
+                      height: 56,
+                      color: "white",
+                      margin: "0 auto 16px",
+                      filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.2))",
                     }}
                   />
                   <h3
                     style={{
-                      fontSize: 18,
-                      fontWeight: 600,
-                      color: "#065f46",
-                      marginBottom: 8,
+                      fontSize: 20,
+                      fontWeight: 700,
+                      color: "white",
+                      marginBottom: 12,
+                      textShadow: "0 2px 4px rgba(0,0,0,0.2)",
                     }}
                   >
                     Submission Complete!
                   </h3>
-                  <p style={{ color: "#065f46" }}>
+                  <p
+                    style={{
+                      color: "rgba(255,255,255,0.9)",
+                      fontSize: "15px",
+                      fontWeight: 500,
+                      margin: 0,
+                    }}
+                  >
                     Thank you for your time. Your responses have been recorded.
                   </p>
                 </div>
@@ -1377,17 +1607,18 @@ export default function App() {
         {activeField && !isSubmitted && (
           <div
             style={{
-              padding: "20px",
-              borderTop: "1px solid #e2e8f0",
-              backgroundColor: "#ffffff",
-              borderBottomLeftRadius: "16px",
-              borderBottomRightRadius: "16px",
+              padding: "24px",
+              borderTop: "1px solid rgba(255,255,255,0.3)",
+              backgroundColor: "rgba(255,255,255,0.95)",
+              borderBottomLeftRadius: "24px",
+              borderBottomRightRadius: "24px",
+              backdropFilter: "blur(20px)",
             }}
           >
             <div
               style={{
                 display: "flex",
-                gap: "12px",
+                gap: "16px",
                 alignItems: "flex-end",
               }}
             >
@@ -1404,8 +1635,8 @@ export default function App() {
                 }}
                 placeholder={
                   isAiChatMode
-                    ? "Continue the conversation."
-                    : activeField.placeholder || "Type your answer."
+                    ? "Continue the conversation..."
+                    : activeField.placeholder || "Type your answer..."
                 }
                 disabled={
                   isSubmitting || !textInputTypes.includes(activeField.type)
@@ -1413,24 +1644,25 @@ export default function App() {
                 autoFocus
                 style={{
                   flex: 1,
-                  padding: "12px 16px",
-                  fontSize: "14px",
-                  backgroundColor: "#f8fafc",
-                  border: "2px solid #e2e8f0",
-                  borderRadius: "12px",
+                  padding: "16px 20px",
+                  fontSize: "15px",
+                  backgroundColor: "rgba(248, 250, 252, 0.8)",
+                  border: "2px solid rgba(226, 232, 240, 0.5)",
+                  borderRadius: "16px",
                   outline: "none",
-                  transition: "all 200ms ease",
+                  transition: "all 300ms ease",
                   fontFamily: "inherit",
+                  fontWeight: 500,
                 }}
                 onFocus={(e) => {
                   e.target.style.borderColor = "#667eea";
-                  e.target.style.backgroundColor = "#ffffff";
+                  e.target.style.backgroundColor = "rgba(255,255,255,0.95)";
                   e.target.style.boxShadow =
-                    "0 0 0 3px rgba(102, 126, 234, 0.1)";
+                    "0 0 0 4px rgba(102, 126, 234, 0.1)";
                 }}
                 onBlur={(e) => {
-                  e.target.style.borderColor = "#e2e8f0";
-                  e.target.style.backgroundColor = "#f8fafc";
+                  e.target.style.borderColor = "rgba(226, 232, 240, 0.5)";
+                  e.target.style.backgroundColor = "rgba(248, 250, 252, 0.8)";
                   e.target.style.boxShadow = "none";
                 }}
               />
@@ -1443,42 +1675,49 @@ export default function App() {
                   isTyping
                 }
                 style={{
-                  padding: "12px 20px",
+                  padding: "16px 24px",
                   background:
                     inputValue.trim() && !isTyping
                       ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
-                      : "#e2e8f0",
+                      : "rgba(226, 232, 240, 0.8)",
                   color: inputValue.trim() && !isTyping ? "#ffffff" : "#94a3b8",
-                  fontSize: "14px",
+                  fontSize: "15px",
                   fontWeight: "600",
-                  borderRadius: "12px",
+                  borderRadius: "16px",
                   border: "none",
                   cursor:
                     inputValue.trim() && !isTyping ? "pointer" : "not-allowed",
-                  transition: "all 200ms ease",
+                  transition: "all 300ms ease",
                   display: "flex",
                   alignItems: "center",
-                  gap: "6px",
-                  minWidth: "70px",
+                  gap: "8px",
+                  minWidth: "80px",
                   justifyContent: "center",
+                  boxShadow:
+                    inputValue.trim() && !isTyping
+                      ? "0 8px 25px rgba(102, 126, 234, 0.3)"
+                      : "none",
                 }}
                 onMouseEnter={(e) => {
                   if (inputValue.trim() && !isTyping) {
-                    e.currentTarget.style.transform = "translateY(-1px)";
+                    e.currentTarget.style.transform = "translateY(-2px)";
                     e.currentTarget.style.boxShadow =
-                      "0 4px 12px rgba(102, 126, 234, 0.4)";
+                      "0 12px 35px rgba(102, 126, 234, 0.4)";
                   }
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "none";
+                  e.currentTarget.style.boxShadow =
+                    inputValue.trim() && !isTyping
+                      ? "0 8px 25px rgba(102, 126, 234, 0.3)"
+                      : "none";
                 }}
               >
                 {isSubmitting || isTyping ? (
                   <div
                     style={{
-                      width: "16px",
-                      height: "16px",
+                      width: "18px",
+                      height: "18px",
                       border: "2px solid #94a3b8",
                       borderTop: "2px solid transparent",
                       borderRadius: "50%",
@@ -1488,8 +1727,8 @@ export default function App() {
                 ) : (
                   <>
                     <svg
-                      width="16"
-                      height="16"
+                      width="18"
+                      height="18"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -1505,67 +1744,53 @@ export default function App() {
         )}
       </div>
 
+      {/* Chat Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         style={{
           position: "fixed",
-          bottom: "16px",
-          right: "16px",
-          width: "60px",
-          height: "60px",
+          bottom: "20px",
+          right: "20px",
+          width: "70px",
+          height: "70px",
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
           color: "#ffffff",
           borderRadius: "50%",
           boxShadow:
-            "0 8px 25px rgba(102, 126, 234, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15)",
-          transition: "all 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+            "0 12px 35px rgba(102, 126, 234, 0.4), 0 6px 16px rgba(0, 0, 0, 0.15)",
+          transition: "all 400ms cubic-bezier(0.4, 0, 0.2, 1)",
           zIndex: 50,
           border: "none",
           cursor: "pointer",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          animation: isOpen ? "none" : "pulse 2s infinite",
+          animation: isOpen ? "none" : "pulse 3s infinite",
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = "scale(1.1)";
           e.currentTarget.style.boxShadow =
-            "0 12px 35px rgba(102, 126, 234, 0.5), 0 6px 16px rgba(0, 0, 0, 0.2)";
+            "0 16px 45px rgba(102, 126, 234, 0.5), 0 8px 20px rgba(0, 0, 0, 0.2)";
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.transform = "scale(1)";
           e.currentTarget.style.boxShadow =
-            "0 8px 25px rgba(102, 126, 234, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15)";
+            "0 12px 35px rgba(102, 126, 234, 0.4), 0 6px 16px rgba(0, 0, 0, 0.15)";
         }}
       >
-        {/* {!isOpen && (
-          <div
-            style={{
-              position: "absolute",
-              top: "8px",
-              right: "8px",
-              width: "12px",
-              height: "12px",
-              backgroundColor: "#ef4444",
-              borderRadius: "50%",
-              border: "2px solid #ffffff",
-              animation: "pulse 2s infinite",
-            }}
-          ></div>
-        )} */}
-
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            transition: "transform 200ms ease",
+            transition: "transform 300ms ease",
+            transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
           }}
         >
           {isOpen ? (
             <svg
-              width="24"
-              height="24"
+              width="28"
+              height="28"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -1575,8 +1800,8 @@ export default function App() {
             </svg>
           ) : (
             <svg
-              width="24"
-              height="24"
+              width="28"
+              height="28"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"

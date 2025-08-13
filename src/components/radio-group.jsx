@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { Circle } from "lucide-react";
 
@@ -8,28 +8,40 @@ const RadioGroup = forwardRef(({ className = "", ...props }, ref) => {
       <style>{`
         .radio-group {
           display: grid;
-          gap: 0.5rem; /* gap-2 */
+          gap: 0.75rem;
         }
         .radio-group-item {
-          aspect-ratio: 1 / 1; /* aspect-square */
-          height: 1rem; /* h-4 */
-          width: 1rem; /* w-4 */
-          border-radius: 9999px; /* rounded-full */
-          border: 1px solid rgb(59, 130, 246); /* border-primary */
-          color: rgb(59, 130, 246); /* text-primary */
-          background-color: white; /* default background */
+          aspect-ratio: 1 / 1;
+          height: 1.25rem;
+          width: 1.25rem;
+          border-radius: 9999px;
+          border: 2px solid #667eea;
+          color: #667eea;
+          background: rgba(255, 255, 255, 0.9);
           outline: none;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: box-shadow 0.15s, opacity 0.15s;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: pointer;
+          backdrop-filter: blur(10px);
         }
         .radio-group-item:focus-visible {
-          box-shadow: 0 0 0 2px rgb(147, 197, 253); /* ring-2 ring-ring */
+          box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        .radio-group-item:hover {
+          transform: scale(1.05);
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
         }
         .radio-group-item:disabled {
           cursor: not-allowed;
           opacity: 0.5;
+        }
+        .radio-group-item[data-state="checked"] {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-color: #667eea;
+          color: white;
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
         .radio-group-indicator {
           display: flex;
@@ -37,8 +49,8 @@ const RadioGroup = forwardRef(({ className = "", ...props }, ref) => {
           justify-content: center;
         }
         .radio-group-indicator-icon {
-          height: 0.625rem; /* h-2.5 */
-          width: 0.625rem; /* w-2.5 */
+          height: 0.75rem;
+          width: 0.75rem;
           fill: currentColor;
           color: currentColor;
         }

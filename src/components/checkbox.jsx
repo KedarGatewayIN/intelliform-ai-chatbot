@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Check } from "lucide-react";
 
@@ -7,29 +7,36 @@ const Checkbox = forwardRef(({ className = "", ...props }, ref) => {
     <>
       <style>{`
         .checkbox {
-          height: 1rem;
-          width: 1rem;
+          height: 1.25rem;
+          width: 1.25rem;
           flex-shrink: 0;
-          border-radius: 0.25rem;
-          border: 1px solid rgb(59, 130, 246);
-          background-color: white;
+          border-radius: 6px;
+          border: 2px solid #667eea;
+          background: rgba(255, 255, 255, 0.9);
           outline: none;
           display: inline-flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          transition: background-color 0.15s, border-color 0.15s, opacity 0.15s;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          backdrop-filter: blur(10px);
         }
         .checkbox:focus-visible {
-          box-shadow: 0 0 0 2px rgb(147, 197, 253);
+          box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        .checkbox:hover {
+          transform: scale(1.05);
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
         }
         .checkbox:disabled {
           cursor: not-allowed;
           opacity: 0.5;
         }
         .checkbox[data-state="checked"] {
-          background-color: rgb(59, 130, 246);
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
+          border-color: #667eea;
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
         .checkbox-indicator {
           display: flex;
