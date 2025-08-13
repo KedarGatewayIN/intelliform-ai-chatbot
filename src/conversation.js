@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "./components/button";
 import { Input } from "./components/input";
 // import { useToast } from "./hooks-toast";
@@ -29,6 +29,7 @@ import {
 import { format } from "date-fns";
 import { apiRequest } from "./lib/utils";
 
+// ---- Inline style helpers ----
 const styles = {
   page: {
     display: "flex",
@@ -183,6 +184,20 @@ const styles = {
   blueText: { color: "#2563eb" },
   errorText: { color: "#ef4444", fontSize: 13, marginTop: 6 },
 };
+
+// ---- Minimal keyframes for the three typing dots (works when you add this CSS globally) ----
+// If you don't have a global stylesheet, you can inject this once:
+if (
+  typeof document !== "undefined" &&
+  !document.getElementById("cf-bounce-style")
+) {
+  const el = document.createElement("style");
+  el.id = "cf-bounce-style";
+  el.innerHTML = `
+  @keyframes bounce {0%,80%,100%{transform:scale(0);}40%{transform:scale(1.0);}}
+  `;
+  document.head.appendChild(el);
+}
 
 function validateField(field, response) {
   let value = response;
@@ -697,27 +712,31 @@ function TypingIndicator() {
   );
 }
 
+const id = "7a548feb-d910-449b-a7f0-c2db670b9548"
+
 export default function App() {
-  const [conversation, setConversation] = useState([]);
   const [form, setForm] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [conversation, setConversation] = useState([]); // { role: 'system'|'user', content, timestamp: Date }
   const [answeredFields, setAnsweredFields] = useState({});
   const [activeField, setActiveField] = useState(null);
+
+  const [userInput, setUserInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showTyping, setShowTyping] = useState(false);
+
   // const { toast } = useToast();
   const scrollAreaRef = useRef(null);
+  const messagesEndRef = useRef(null);
   const [startTime] = useState(Date.now());
+
   const [isAiChatMode, setIsAiChatMode] = useState(false);
   const [aiChatStartIndex, setAiChatStartIndex] = useState(null);
   const [aiConversation, setAiConversation] = useState([]);
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [inputValue, setInputValue] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
-  const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
-  const [id, setId] = useState(null);
 
   const textInputTypes = [
     "text",
@@ -729,33 +748,17 @@ export default function App() {
   ];
 
   useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      setId("7a548feb-d910-449b-a7f0-c2db670b9548");
-    } else {
-      const scriptTag = document.getElementById("gateway-chatbot");
-      const chatbotId = scriptTag.getAttribute("chatbotId");
-      if (chatbotId) {
-        setId(chatbotId);
-      } else {
-        console.error("ChatbotID not found");
-        setId("7a548feb-d910-449b-a7f0-c2db670b9548");
-      }
-    }
     loadForm();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {
-    if (messagesEndRef.current)
+    if (messagesEndRef.current) {
       try {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
       } catch {}
-  }, [conversation, isTyping]);
-
-  useEffect(() => {
-    if (isOpen && inputRef.current) {
-      setTimeout(() => inputRef.current?.focus(), 100);
     }
-  }, [isOpen]);
+  }, [conversation, showTyping]);
 
   useEffect(() => {
     if (
@@ -764,9 +767,9 @@ export default function App() {
       activeField.aiEnabled
     ) {
       setIsAiChatMode(true);
-      setIsTyping(true);
+      setShowTyping(true);
       setTimeout(() => {
-        setIsTyping(false);
+        setShowTyping(false);
         setConversation((prev) => [
           ...prev,
           { role: "system", content: activeField.label, timestamp: new Date() },
@@ -778,10 +781,9 @@ export default function App() {
       setAiChatStartIndex(null);
     }
     if (inputRef.current) inputRef.current.focus();
-  }, [activeField]);
+  }, [activeField]); // eslint-disable-line
 
   async function loadForm() {
-    if (!id) return null;
     setIsLoading(true);
     try {
       const response = await apiRequest("GET", `/api/public/forms/${id}`);
@@ -835,7 +837,7 @@ export default function App() {
 
   async function submitForm(finalAnswers, aiConvo) {
     setIsSubmitting(true);
-    setIsTyping(true);
+    setShowTyping(true);
     try {
       const timeTaken = Math.floor((Date.now() - startTime) / 1000);
       const submission = await apiRequest(
@@ -866,7 +868,7 @@ export default function App() {
       }
 
       setTimeout(() => {
-        setIsTyping(false);
+        setShowTyping(false);
         setIsSubmitted(true);
         setConversation((prev) => [
           ...prev,
@@ -879,7 +881,7 @@ export default function App() {
         ]);
       }, 1500);
     } catch (error) {
-      setIsTyping(false);
+      setShowTyping(false);
       // toast({
       //   title: "Submission Error",
       //   description: "Could not submit the form.",
@@ -916,9 +918,9 @@ export default function App() {
     const newAnswers = { ...answeredFields, [field.id]: validatedValue };
     setAnsweredFields(newAnswers);
 
-    setIsTyping(true);
+    setShowTyping(true);
     setTimeout(() => {
-      setIsTyping(false);
+      setShowTyping(false);
       const nextField = getNextField(newAnswers, form.fields);
       setActiveField(nextField);
       if (!nextField) submitForm(newAnswers);
@@ -926,10 +928,10 @@ export default function App() {
   }
 
   async function handleUserInputChange() {
-    if (!inputValue.trim() || !activeField) return;
+    if (!userInput.trim() || !activeField) return;
 
-    const currentInput = inputValue;
-    setInputValue("");
+    const currentInput = userInput;
+    setUserInput("");
 
     if (isAiChatMode && aiChatStartIndex !== null) {
       setConversation((prev) => [
@@ -1015,7 +1017,7 @@ export default function App() {
           if (!nextField) submitForm(newAnswers, aiConvo);
         }
       } catch (error) {
-        setIsTyping(false);
+        setShowTyping(false);
         setIsSubmitting(false);
         // toast({
         //   title: "AI Error",
@@ -1101,558 +1103,186 @@ export default function App() {
   }
 
   return (
-    <>
-      <style>{`
-        @keyframes typing {
-          0%, 60%, 100% {
-            transform: translateY(0);
-            opacity: 0.4;
-          }
-          30% {
-            transform: translateY(-10px);
-            opacity: 1;
-          }
-        }
-        
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes pulse {
-          0%, 100% {
-            transform: scale(1);
-          }
-          50% {
-            transform: scale(1.05);
-          }
-        }
-        
-        .message-enter {
-          animation: slideUp 0.3s ease-out;
-        }
-        
-        .chat-window::-webkit-scrollbar {
-          width: 6px;
-        }
-        
-        .chat-window::-webkit-scrollbar-track {
-          background: #f1f5f9;
-          border-radius: 3px;
-        }
-        
-        .chat-window::-webkit-scrollbar-thumb {
-          background: #cbd5e1;
-          border-radius: 3px;
-        }
-        
-        .chat-window::-webkit-scrollbar-thumb:hover {
-          background: #94a3b8;
-        }
-      `}</style>
-
-      {/* Chat Window */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: "80px",
-          right: "16px",
-          width: "380px",
-          height: "500px",
-          backgroundColor: "#ffffff",
-          border: "1px solid #e2e8f0",
-          borderRadius: "16px",
-          boxShadow:
-            "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05)",
-          transition: "all 300ms cubic-bezier(0.4, 0, 0.2, 1)",
-          zIndex: 50,
-          display: "flex",
-          flexDirection: "column",
-          opacity: isOpen ? 1 : 0,
-          transform: isOpen
-            ? "scale(1) translateY(0)"
-            : "scale(0.95) translateY(10px)",
-          pointerEvents: isOpen ? "auto" : "none",
-          fontFamily: "system-ui, -apple-system, sans-serif",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "20px",
-            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-            color: "#ffffff",
-            borderTopLeftRadius: "16px",
-            borderTopRightRadius: "16px",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundImage:
-                "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-              pointerEvents: "none",
-            }}
-          ></div>
-
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              position: "relative",
-            }}
-          >
-            <div
-              style={{
-                width: "36px",
-                height: "36px",
-                backgroundColor: "rgba(255, 255, 255, 0.2)",
-                borderRadius: "8px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backdropFilter: "blur(10px)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
-              }}
-            >
-              <img
-                src="https://tse1.mm.bing.net/th/id/OIP.62xhYrRo3ea-St_vraobugHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"
-                alt="Gateway Logo"
-                style={{
-                  width: "36px",
-                  height: "36px",
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                  borderRadius: "8px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backdropFilter: "blur(10px)",
-                  border: "1px solid rgba(255, 255, 255, 0.3)",
-                }}
-              />
-            </div>
-            <div>
-              <h3
-                style={{
-                  margin: 0,
-                  fontWeight: "600",
-                  fontSize: "18px",
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.1)",
-                }}
-              >
-                {form.title || "Gateway AI"}
-              </h3>
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "12px",
-                  opacity: 0.9,
-                  fontWeight: "400",
-                }}
-              >
-                {form.description || "Gateway AI • Online • Ready to help"}
-              </p>
-            </div>
-          </div>
-
-          <button
-            onClick={() => setIsOpen(false)}
-            style={{
-              backgroundColor: "rgba(255, 255, 255, 0.2)",
-              border: "none",
-              borderRadius: "8px",
-              padding: "8px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "all 200ms ease",
-              backdropFilter: "blur(10px)",
-              position: "relative",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor =
-                "rgba(255, 255, 255, 0.3)";
-              e.currentTarget.style.transform = "scale(1.05)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor =
-                "rgba(255, 255, 255, 0.2)";
-              e.currentTarget.style.transform = "scale(1)";
-            }}
-          >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          </button>
+    <div style={styles.page}>
+      {/* Header */}
+      <header style={styles.header}>
+        <div style={styles.headerInner}>
+          <img
+            src="https://thegatewaycorp.com/wp-content/themes/gatewaycorp/images/logo.svg"
+            alt="Company Logo"
+            style={styles.logo}
+          />
+          <h1 style={styles.h1}>{form.title}</h1>
+          <p style={styles.pDesc}>{form.description}</p>
         </div>
+      </header>
 
-        <div
-          style={{
-            flex: 1,
-            overflowY: "auto",
-            padding: "20px",
-            background: "linear-gradient(to bottom, #f8fafc 0%, #f1f5f9 100%)",
-            position: "relative",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "16px",
-            }}
-          >
-            {conversation.map((msg, index) => (
-              <div
-                key={index}
-                style={{
-                  ...styles.rowBase,
-                  ...(msg.role === "user" ? styles.rowRight : styles.rowLeft),
-                }}
-              >
-                {msg.role === "system" && (
+      {/* Chat Area */}
+      <div style={styles.shell}>
+        <div style={styles.shellInner}>
+          <ScrollArea ref={scrollAreaRef} style={styles.scrollPad}>
+            <div style={{ display: "grid", gap: 16 }}>
+              {conversation.map((msg, index) => (
+                <div
+                  key={index}
+                  style={{
+                    ...styles.rowBase,
+                    ...(msg.role === "user" ? styles.rowRight : styles.rowLeft),
+                  }}
+                >
+                  {msg.role === "system" && (
+                    <div style={styles.avatarBot}>
+                      <BotIcon style={{ width: 16, height: 16 }} />
+                    </div>
+                  )}
+
+                  <div
+                    style={{
+                      ...styles.bubble,
+                      ...(msg.role === "user"
+                        ? styles.bubbleUser
+                        : styles.bubbleBot),
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontSize: 14,
+                        lineHeight: 1.5,
+                        whiteSpace: "pre-wrap",
+                        margin: 0,
+                      }}
+                    >
+                      {msg.content}
+                    </p>
+                  </div>
+
+                  {msg.role === "user" && (
+                    <div style={styles.avatarUser}>
+                      <UserIcon style={{ width: 16, height: 16 }} />
+                    </div>
+                  )}
+                </div>
+              ))}
+
+              {showTyping && <TypingIndicator />}
+
+              {activeField && !isAiChatMode && !showTyping && (
+                <div style={{ ...styles.rowBase, ...styles.rowLeft }}>
                   <div style={styles.avatarBot}>
                     <BotIcon style={{ width: 16, height: 16 }} />
                   </div>
-                )}
-
-                <div
-                  style={{
-                    ...styles.bubble,
-                    ...(msg.role === "user"
-                      ? styles.bubbleUser
-                      : styles.bubbleBot),
-                  }}
-                >
-                  <p
-                    style={{
-                      fontSize: 14,
-                      lineHeight: 1.5,
-                      whiteSpace: "pre-wrap",
-                      margin: 0,
-                    }}
-                  >
-                    {msg.content}
-                  </p>
-                </div>
-
-                {msg.role === "user" && (
-                  <div style={styles.avatarUser}>
-                    <UserIcon style={{ width: 16, height: 16 }} />
+                  <div style={styles.card}>
+                    <p
+                      style={{
+                        fontWeight: 600,
+                        margin: "0 0 12px",
+                        color: "#111827",
+                      }}
+                    >
+                      {activeField.label}
+                    </p>
+                    {!textInputTypes.includes(activeField.type) ? (
+                      <FieldRenderer
+                        field={activeField}
+                        onSubmit={(value) =>
+                          handleFieldSubmit(activeField, value)
+                        }
+                      />
+                    ) : (
+                      <p style={styles.subtle}>
+                        {activeField.placeholder ||
+                          "Please provide your answer below."}
+                      </p>
+                    )}
                   </div>
-                )}
-              </div>
-            ))}
-
-            {activeField && !isAiChatMode && !isTyping && (
-              <div style={{ ...styles.rowBase, ...styles.rowLeft }}>
-                <div style={styles.avatarBot}>
-                  <BotIcon style={{ width: 16, height: 16 }} />
                 </div>
-                <div style={styles.card}>
-                  <p
-                    style={{
-                      fontWeight: 600,
-                      margin: "0 0 12px",
-                      color: "#111827",
-                    }}
-                  >
-                    {activeField.label}
-                  </p>
-                  {!textInputTypes.includes(activeField.type) ? (
-                    <FieldRenderer
-                      field={activeField}
-                      onSubmit={(value) =>
-                        handleFieldSubmit(activeField, value)
+              )}
+
+              {isSubmitted && (
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={styles.successBox}>
+                    <CheckCircleIcon
+                      style={{
+                        width: 48,
+                        height: 48,
+                        color: "#059669",
+                        margin: "0 auto 12px",
+                      }}
+                    />
+                    <h3
+                      style={{
+                        fontSize: 18,
+                        fontWeight: 600,
+                        color: "#065f46",
+                        marginBottom: 8,
+                      }}
+                    >
+                      Submission Complete!
+                    </h3>
+                    <p style={{ color: "#065f46" }}>
+                      Thank you for your time. Your responses have been
+                      recorded.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              <div ref={messagesEndRef} />
+            </div>
+          </ScrollArea>
+
+          {/* Input Area */}
+          {activeField && !isSubmitted && (
+            <div style={styles.inputBar}>
+              <div style={styles.inputInner}>
+                <div style={{ flex: 1, position: "relative" }}>
+                  <Input
+                    value={userInput}
+                    onChange={(e) => setUserInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleUserInputChange();
                       }
+                    }}
+                    placeholder={
+                      isAiChatMode
+                        ? "Continue the conversation."
+                        : activeField.placeholder || "Type your answer."
+                    }
+                    disabled={
+                      isSubmitting || !textInputTypes.includes(activeField.type)
+                    }
+                    autoFocus
+                    ref={inputRef}
+                    style={styles.input}
+                  />
+                </div>
+                <Button
+                  onClick={handleUserInputChange}
+                  disabled={
+                    isSubmitting ||
+                    !textInputTypes.includes(activeField.type) ||
+                    !userInput.trim()
+                  }
+                  style={styles.sendBtn}
+                >
+                  {isSubmitting ? (
+                    <LoaderIcon
+                      style={{ width: 16, height: 16 }}
+                      className="animate-spin"
                     />
                   ) : (
-                    <p style={styles.subtle}>
-                      {activeField.placeholder ||
-                        "Please provide your answer below."}
-                    </p>
+                    <SendIcon
+                      style={{ width: 16, height: 16, color: "white" }}
+                    />
                   )}
-                </div>
+                </Button>
               </div>
-            )}
-
-            {isSubmitted && (
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <div style={styles.successBox}>
-                  <CheckCircleIcon
-                    style={{
-                      width: 48,
-                      height: 48,
-                      color: "#059669",
-                      margin: "0 auto 12px",
-                    }}
-                  />
-                  <h3
-                    style={{
-                      fontSize: 18,
-                      fontWeight: 600,
-                      color: "#065f46",
-                      marginBottom: 8,
-                    }}
-                  >
-                    Submission Complete!
-                  </h3>
-                  <p style={{ color: "#065f46" }}>
-                    Thank you for your time. Your responses have been recorded.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {isTyping && <TypingIndicator />}
-            <div ref={messagesEndRef} />
-          </div>
-        </div>
-
-        {activeField && !isSubmitted && (
-          <div
-            style={{
-              padding: "20px",
-              borderTop: "1px solid #e2e8f0",
-              backgroundColor: "#ffffff",
-              borderBottomLeftRadius: "16px",
-              borderBottomRightRadius: "16px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                gap: "12px",
-                alignItems: "flex-end",
-              }}
-            >
-              <input
-                ref={inputRef}
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleUserInputChange();
-                  }
-                }}
-                placeholder={
-                  isAiChatMode
-                    ? "Continue the conversation."
-                    : activeField.placeholder || "Type your answer."
-                }
-                disabled={
-                  isSubmitting || !textInputTypes.includes(activeField.type)
-                }
-                autoFocus
-                style={{
-                  flex: 1,
-                  padding: "12px 16px",
-                  fontSize: "14px",
-                  backgroundColor: "#f8fafc",
-                  border: "2px solid #e2e8f0",
-                  borderRadius: "12px",
-                  outline: "none",
-                  transition: "all 200ms ease",
-                  fontFamily: "inherit",
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = "#667eea";
-                  e.target.style.backgroundColor = "#ffffff";
-                  e.target.style.boxShadow =
-                    "0 0 0 3px rgba(102, 126, 234, 0.1)";
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = "#e2e8f0";
-                  e.target.style.backgroundColor = "#f8fafc";
-                  e.target.style.boxShadow = "none";
-                }}
-              />
-              <button
-                onClick={handleUserInputChange}
-                disabled={
-                  isSubmitting ||
-                  !textInputTypes.includes(activeField.type) ||
-                  !inputValue.trim() ||
-                  isTyping
-                }
-                style={{
-                  padding: "12px 20px",
-                  background:
-                    inputValue.trim() && !isTyping
-                      ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
-                      : "#e2e8f0",
-                  color: inputValue.trim() && !isTyping ? "#ffffff" : "#94a3b8",
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  borderRadius: "12px",
-                  border: "none",
-                  cursor:
-                    inputValue.trim() && !isTyping ? "pointer" : "not-allowed",
-                  transition: "all 200ms ease",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  minWidth: "70px",
-                  justifyContent: "center",
-                }}
-                onMouseEnter={(e) => {
-                  if (inputValue.trim() && !isTyping) {
-                    e.currentTarget.style.transform = "translateY(-1px)";
-                    e.currentTarget.style.boxShadow =
-                      "0 4px 12px rgba(102, 126, 234, 0.4)";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "none";
-                }}
-              >
-                {isSubmitting || isTyping ? (
-                  <div
-                    style={{
-                      width: "16px",
-                      height: "16px",
-                      border: "2px solid #94a3b8",
-                      borderTop: "2px solid transparent",
-                      borderRadius: "50%",
-                      animation: "spin 1s linear infinite",
-                    }}
-                  ></div>
-                ) : (
-                  <>
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
-                    </svg>
-                  </>
-                )}
-              </button>
             </div>
-          </div>
-        )}
-      </div>
-
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        style={{
-          position: "fixed",
-          bottom: "16px",
-          right: "16px",
-          width: "60px",
-          height: "60px",
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          color: "#ffffff",
-          borderRadius: "50%",
-          boxShadow:
-            "0 8px 25px rgba(102, 126, 234, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15)",
-          transition: "all 300ms cubic-bezier(0.4, 0, 0.2, 1)",
-          zIndex: 50,
-          border: "none",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          animation: isOpen ? "none" : "pulse 2s infinite",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "scale(1.1)";
-          e.currentTarget.style.boxShadow =
-            "0 12px 35px rgba(102, 126, 234, 0.5), 0 6px 16px rgba(0, 0, 0, 0.2)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "scale(1)";
-          e.currentTarget.style.boxShadow =
-            "0 8px 25px rgba(102, 126, 234, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15)";
-        }}
-      >
-        {/* {!isOpen && (
-          <div
-            style={{
-              position: "absolute",
-              top: "8px",
-              right: "8px",
-              width: "12px",
-              height: "12px",
-              backgroundColor: "#ef4444",
-              borderRadius: "50%",
-              border: "2px solid #ffffff",
-              animation: "pulse 2s infinite",
-            }}
-          ></div>
-        )} */}
-
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            transition: "transform 200ms ease",
-          }}
-        >
-          {isOpen ? (
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-              <path d="M8 9h8M8 13h6" />
-            </svg>
           )}
         </div>
-      </button>
-
-      <style>{`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
-    </>
+      </div>
+    </div>
   );
 }
