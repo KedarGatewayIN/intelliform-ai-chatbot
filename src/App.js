@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "./components/button";
 import { Input } from "./components/input";
-// import { useToast } from "./hooks-toast";
 import { RadioGroup, RadioGroupItem } from "./components/radio-group";
 import { Checkbox } from "./components/checkbox";
 import {
@@ -881,7 +880,7 @@ export default function App() {
   const [activeField, setActiveField] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  // const { toast } = useToast();
+  const [errorMessage, setErrorMessage] = useState("");
   const scrollAreaRef = useRef(null);
   const [startTime] = useState(Date.now());
   const [isAiChatMode, setIsAiChatMode] = useState(false);
@@ -895,6 +894,13 @@ export default function App() {
   const inputRef = useRef(null);
   const [id, setId] = useState(null);
 
+  const showError = (message) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 3000);
+  };
+
   const textInputTypes = [
     "text",
     "textarea",
@@ -906,7 +912,7 @@ export default function App() {
 
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
-      setId("7a548feb-d910-449b-a7f0-c2db670b9548");
+      setId("c25cc469-4411-44e6-b650-a2982b00573a");
     } else {
       const scriptTag = document.getElementById("gateway-chatbot");
       const chatbotId = scriptTag.getAttribute("chatbotId");
@@ -980,11 +986,7 @@ export default function App() {
         }, 1000);
       }, 500);
     } catch (error) {
-      // toast({
-      //   title: "Error",
-      //   description: "Form not found",
-      //   variant: "destructive",
-      // });
+      showError("Form not found");
     } finally {
       setIsLoading(false);
     }
@@ -1009,16 +1011,17 @@ export default function App() {
     return null;
   }
 
-  async function submitForm(finalAnswers, aiConvo) {
+  async function submitForm(answers, aiConvo = []) {
     setIsSubmitting(true);
     setIsTyping(true);
+
     try {
       const timeTaken = Math.floor((Date.now() - startTime) / 1000);
       const submission = await apiRequest(
         "POST",
         `/api/public/forms/${form.id}/submit`,
         {
-          data: finalAnswers,
+          data: answers,
           timeTaken,
         }
       );
@@ -1056,11 +1059,7 @@ export default function App() {
       }, 1500);
     } catch (error) {
       setIsTyping(false);
-      // toast({
-      //   title: "Submission Error",
-      //   description: "Could not submit the form.",
-      //   variant: "destructive",
-      // });
+      showError("Could not submit the form.");
     } finally {
       setIsSubmitting(false);
       if (inputRef.current) inputRef.current.focus();
@@ -1074,11 +1073,7 @@ export default function App() {
       message,
     } = validateField(field, value);
     if (!valid) {
-      // toast({
-      //   title: "Invalid Input",
-      //   description: message,
-      //   variant: "destructive",
-      // });
+      showError(message);
       return;
     }
 
@@ -1193,11 +1188,7 @@ export default function App() {
       } catch (error) {
         setIsTyping(false);
         setIsSubmitting(false);
-        // toast({
-        //   title: "AI Error",
-        //   description: "The assistant is unavailable.",
-        //   variant: "destructive",
-        // });
+        showError("The assistant is unavailable.");
         setConversation((prev) => prev.slice(0, aiChatStartIndex));
         setIsAiChatMode(false);
       } finally {
@@ -1307,7 +1298,7 @@ export default function App() {
       <div
         style={{
           position: "fixed",
-          bottom: "90px",
+          bottom: "96px",
           right: "20px",
           width: "420px",
           height: "600px",
@@ -1604,10 +1595,10 @@ export default function App() {
           </div>
         </div>
 
-        {activeField && !isSubmitted && (
+        {activeField && !isSubmitted && textInputTypes.includes(activeField.type) && (
           <div
             style={{
-              padding: "24px",
+              padding: "24px 24px 12px 24px",
               borderTop: "1px solid rgba(255,255,255,0.3)",
               backgroundColor: "rgba(255,255,255,0.95)",
               borderBottomLeftRadius: "24px",
@@ -1615,6 +1606,7 @@ export default function App() {
               backdropFilter: "blur(20px)",
             }}
           >
+            {/* Input area */}
             <div
               style={{
                 display: "flex",
@@ -1716,14 +1708,14 @@ export default function App() {
                 {isSubmitting || isTyping ? (
                   <div
                     style={{
-                      width: "18px",
-                      height: "18px",
-                      border: "2px solid #94a3b8",
-                      borderTop: "2px solid transparent",
+                      width: "16px",
+                      height: "16px",
+                      border: "2px solid rgba(255,255,255,0.3)",
+                      borderTop: "2px solid #ffffff",
                       borderRadius: "50%",
                       animation: "spin 1s linear infinite",
                     }}
-                  ></div>
+                  />
                 ) : (
                   <>
                     <svg
@@ -1739,6 +1731,30 @@ export default function App() {
                   </>
                 )}
               </button>
+            </div>
+
+            <div
+              style={{
+                height: "4px",
+                display: "flex",
+                alignItems: "center",
+                marginTop: "8px",
+              }}
+            >
+              {errorMessage && (
+                <div
+                  style={{
+                    color: "#dc2626",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    padding: "4px 12px",
+                    borderRadius: "8px",
+                    animation: "fadeIn 0.2s ease-in",
+                  }}
+                >
+                  {errorMessage}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -1814,10 +1830,25 @@ export default function App() {
         </div>
       </button>
 
-      <style>{`
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-4px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
         @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
       `}</style>
     </>
