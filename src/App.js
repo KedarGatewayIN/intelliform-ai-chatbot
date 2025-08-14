@@ -881,7 +881,6 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const scrollAreaRef = useRef(null);
   const [startTime] = useState(Date.now());
   const [isAiChatMode, setIsAiChatMode] = useState(false);
   const [aiChatStartIndex, setAiChatStartIndex] = useState(null);
@@ -912,7 +911,7 @@ export default function App() {
 
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
-      setId("c25cc469-4411-44e6-b650-a2982b00573a");
+      setId("30905c8d-dbb5-4c83-9b7a-7c6eda131082");
     } else {
       const scriptTag = document.getElementById("gateway-chatbot");
       const chatbotId = scriptTag.getAttribute("chatbotId");
@@ -970,7 +969,6 @@ export default function App() {
       const formData = await response.json();
       setForm(formData);
 
-      // welcome
       setTimeout(() => {
         setConversation([
           {
@@ -986,7 +984,7 @@ export default function App() {
         }, 1000);
       }, 500);
     } catch (error) {
-      showError("Form not found");
+      console.error("Form not found");
     } finally {
       setIsLoading(false);
     }

@@ -1,12 +1,21 @@
 export async function apiRequest(method, url, data) {
-  const res = await fetch(`http://localhost:5000${url}`, {
-  // const res = await fetch(`https://intelliform.onrender.com${url}`, {
-    method,
-    headers: data ? { "Content-Type": "application/json" } : {},
-    body: data ? JSON.stringify(data) : undefined,
-    credentials: "include",
-  });
+  try {
+    // const res = await fetch(`http://localhost:5000${url}`, {
+    const res = await fetch(`https://intelliform.onrender.com${url}`, {
+      method,
+      headers: data ? { "Content-Type": "application/json" } : {},
+      body: data ? JSON.stringify(data) : undefined,
+      credentials: "omit",
+      // credentials: "include",
+    });
 
-//   await throwIfResNotOk(res);
-  return res;
+    if (!res.ok) {
+      throw new Error("API Failed!");
+    }
+
+    return res;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
