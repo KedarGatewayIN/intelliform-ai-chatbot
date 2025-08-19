@@ -25,6 +25,8 @@ import {
 import { format } from "date-fns";
 import { apiRequest } from "./lib/utils";
 
+const DEVchatbotID = "ec4bcfa3-833c-46b6-b814-46cc6d23cef4";
+
 const styles = {
   page: {
     display: "flex",
@@ -304,8 +306,8 @@ function validateField(field, response) {
             return { valid: false, message: "Please enter a valid URL." };
           }
           break;
-        case "regex":
-          const regex = new RegExp(rule.pattern);
+        case "pattern":
+          const regex = new RegExp(rule.value);
           if (!regex.test(value))
             return {
               valid: false,
@@ -382,7 +384,6 @@ function FieldRenderer({ field, onSubmit }) {
     case "text":
     case "email":
     case "url":
-    case "number":
     case "password":
       return (
         <div style={fieldStyles.container}>
@@ -490,12 +491,12 @@ function FieldRenderer({ field, onSubmit }) {
                 background: "rgba(255,255,255,0.9)",
               }}
             >
-              <SelectValue placeholder={field.placeholder} />
+              <SelectValue placeholder={field.label} />
             </SelectTrigger>
             <SelectContent>
               {field.options?.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
+                <SelectItem key={option} value={option}>
+                  {option}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -528,7 +529,7 @@ function FieldRenderer({ field, onSubmit }) {
           >
             {field.options?.map((option) => (
               <div
-                key={option.value}
+                key={option}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -537,9 +538,9 @@ function FieldRenderer({ field, onSubmit }) {
                   transition: "all 0.2s ease",
                 }}
               >
-                <RadioGroupItem value={option.value} id={option.value} />
+                <RadioGroupItem value={option} id={option} />
                 <Label
-                  htmlFor={option.value}
+                  htmlFor={option}
                   style={{
                     fontSize: "15px",
                     fontWeight: 500,
@@ -547,7 +548,7 @@ function FieldRenderer({ field, onSubmit }) {
                     color: "#374151",
                   }}
                 >
-                  {option.label}
+                  {option}
                 </Label>
               </div>
             ))}
@@ -576,7 +577,7 @@ function FieldRenderer({ field, onSubmit }) {
           <div style={{ marginBottom: "16px" }}>
             {field.options?.map((option) => (
               <div
-                key={option.value}
+                key={option}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -586,18 +587,18 @@ function FieldRenderer({ field, onSubmit }) {
                 }}
               >
                 <Checkbox
-                  checked={value.includes(option.value)}
+                  checked={value.includes(option)}
                   onCheckedChange={(checked) => {
                     if (checked) {
-                      setValue([...value, option.value]);
+                      setValue([...value, option]);
                     } else {
-                      setValue(value.filter((v) => v !== option.value));
+                      setValue(value.filter((v) => v !== option));
                     }
                   }}
-                  id={option.value}
+                  id={option}
                 />
                 <Label
-                  htmlFor={option.value}
+                  htmlFor={option}
                   style={{
                     fontSize: "15px",
                     fontWeight: 500,
@@ -605,7 +606,7 @@ function FieldRenderer({ field, onSubmit }) {
                     color: "#374151",
                   }}
                 >
-                  {option.label}
+                  {option}
                 </Label>
               </div>
             ))}
@@ -734,133 +735,6 @@ function FieldRenderer({ field, onSubmit }) {
         </div>
       );
 
-    case "range":
-      return (
-        <div style={fieldStyles.container}>
-          <div style={{ marginBottom: "16px" }}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "12px",
-                fontSize: "14px",
-                color: "#64748b",
-                fontWeight: 500,
-              }}
-            >
-              <span>{field.min || 0}</span>
-              <span
-                style={{
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  color: "#374151",
-                }}
-              >
-                {value || field.min || 0}
-              </span>
-              <span>{field.max || 100}</span>
-            </div>
-            <Slider
-              value={[value || field.min || 0]}
-              onValueChange={(newValue) => setValue(newValue[0])}
-              max={field.max || 100}
-              min={field.min || 0}
-              step={field.step || 1}
-            />
-          </div>
-          {error && <p style={styles.errorText}>{error}</p>}
-          <Button
-            onClick={handleSubmit}
-            style={fieldStyles.button}
-            onMouseEnter={(e) => {
-              e.target.style.transform = "translateY(-2px)";
-              e.target.style.boxShadow = "0 8px 25px rgba(102, 126, 234, 0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = "translateY(0)";
-              e.target.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
-            }}
-          >
-            Submit Answer
-          </Button>
-        </div>
-      );
-
-    case "file":
-      return (
-        <div style={fieldStyles.container}>
-          <div
-            style={{
-              ...styles.dashedDrop,
-              marginBottom: "16px",
-            }}
-            onDragOver={(e) => {
-              e.preventDefault();
-              e.currentTarget.style.borderColor = "#667eea";
-              e.currentTarget.style.background = "rgba(102, 126, 234, 0.1)";
-            }}
-            onDragLeave={(e) => {
-              e.currentTarget.style.borderColor = "rgba(102, 126, 234, 0.3)";
-              e.currentTarget.style.background = "rgba(102, 126, 234, 0.05)";
-            }}
-          >
-            <UploadIcon
-              style={{
-                height: 48,
-                width: 48,
-                color: "#667eea",
-                margin: "0 auto 16px",
-              }}
-            />
-            <p
-              style={{
-                margin: "0 0 8px",
-                fontWeight: 600,
-                color: "#374151",
-              }}
-            >
-              Drop files here or click to browse
-            </p>
-            <p
-              style={{
-                margin: 0,
-                fontSize: "14px",
-                color: "#64748b",
-              }}
-            >
-              {field.placeholder || "Select files to upload"}
-            </p>
-            <Input
-              type="file"
-              multiple={field.multiple}
-              accept={field.accept}
-              onChange={(e) => setValue(e.target.files)}
-              style={{
-                position: "absolute",
-                inset: 0,
-                opacity: 0,
-                cursor: "pointer",
-              }}
-            />
-          </div>
-          {error && <p style={styles.errorText}>{error}</p>}
-          <Button
-            onClick={handleSubmit}
-            style={fieldStyles.button}
-            onMouseEnter={(e) => {
-              e.target.style.transform = "translateY(-2px)";
-              e.target.style.boxShadow = "0 8px 25px rgba(102, 126, 234, 0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = "translateY(0)";
-              e.target.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
-            }}
-          >
-            Submit Answer
-          </Button>
-        </div>
-      );
-
     default:
       return (
         <div style={fieldStyles.container}>
@@ -911,7 +785,7 @@ export default function App() {
 
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
-      setId("30905c8d-dbb5-4c83-9b7a-7c6eda131082");
+      setId(DEVchatbotID);
     } else {
       const scriptTag = document.getElementById("gateway-chatbot");
       const chatbotId = scriptTag.getAttribute("chatbotId");
@@ -919,7 +793,7 @@ export default function App() {
         setId(chatbotId);
       } else {
         console.error("ChatbotID not found");
-        setId("7a548feb-d910-449b-a7f0-c2db670b9548");
+        setId(DEVchatbotID);
       }
     }
     loadForm();
