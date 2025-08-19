@@ -267,6 +267,21 @@ function validateField(field, response) {
     return { valid: false, message: "This field is required." };
   }
 
+  // Matrix specific validation
+  if (field.type === "matrix") {
+    const rows = field.matrixRows || ["Row 1", "Row 2", "Row 3"];
+    const objectValue = (value && typeof value === "object") ? value : {};
+    if (field.required) {
+      for (let i = 0; i < rows.length; i++) {
+        const key = `${i}`;
+        if (!objectValue[key] || String(objectValue[key]).trim() === "") {
+          return { valid: false, message: "Please select an option for each row." };
+        }
+      }
+    }
+    return { valid: true, value: objectValue };
+  }
+
   if (field.validation) {
     for (const rule of field.validation) {
       switch (rule.type) {
@@ -340,7 +355,11 @@ function TypingIndicator() {
 
 function FieldRenderer({ field, onSubmit }) {
   const [value, setValue] = useState(
-    field.type === "checkbox" ? [] : field.defaultValue || ""
+    field.type === "checkbox"
+      ? []
+      : field.type === "matrix"
+      ? field.defaultValue || {}
+      : field.defaultValue || ""
   );
   const [error, setError] = useState("");
   const [date, setDate] = useState();
@@ -735,6 +754,126 @@ function FieldRenderer({ field, onSubmit }) {
         </div>
       );
 
+    case "matrix": {
+      const matrixRows = field.matrixRows || ["Row 1", "Row 2", "Row 3"];
+      const matrixColumns = field.matrixColumns || ["1", "2", "3", "4", "5"];
+      const matrixValue = (value && typeof value === "object") ? value : {};
+
+      return (
+        <div style={fieldStyles.container}>
+          <div
+            style={{
+              border: "1px solid #e6eaf0",
+              borderRadius: 12,
+              overflowX: "auto",
+              background: "#ffffff",
+            }}
+          >
+            <table
+              style={{
+                width: "100%",
+                fontSize: 14,
+                borderCollapse: "separate",
+                borderSpacing: 0,
+              }}
+            >
+              <thead>
+                <tr>
+                  <th
+                    style={{
+                      textAlign: "left",
+                      padding: 12,
+                      borderBottom: "1px solid #eef2f7",
+                      background: "#f8fafc",
+                      minWidth: 140,
+                      fontWeight: 600,
+                      color: "#111827",
+                    }}
+                  ></th>
+                  {matrixColumns.map((col, index) => (
+                    <th
+                      key={index}
+                      style={{
+                        textAlign: "center",
+                        padding: 12,
+                        borderBottom: "1px solid #eef2f7",
+                        background: "#f8fafc",
+                        minWidth: 48,
+                        fontWeight: 600,
+                        color: "#111827",
+                      }}
+                    >
+                      {col}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {matrixRows.map((row, rowIndex) => (
+                  <RadioGroup
+                    key={rowIndex}
+                    asChild
+                    value={matrixValue[`${rowIndex}`] || ""}
+                    onValueChange={(val) => {
+                      const newValue = {
+                        ...matrixValue,
+                        [`${rowIndex}`]: val,
+                      };
+                      setValue(newValue);
+                    }}
+                    style={{ display: "table-row" }}
+                  >
+                    <tr style={{ borderBottom: "1px solid #f1f5f9" }}>
+                      <td
+                        style={{
+                          padding: 12,
+                          fontWeight: 600,
+                          color: "#374151",
+                          background: rowIndex % 2 === 0 ? "#f8fafc" : "#ffffff",
+                          borderRight: "1px solid #eef2f7",
+                          minWidth: 160,
+                        }}
+                      >
+                        {row}
+                      </td>
+                      {matrixColumns.map((_, colIndex) => (
+                        <td key={colIndex} style={{ textAlign: "center", padding: 12 }}>
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <RadioGroupItem
+                              value={`${colIndex + 1}`}
+                              id={`${field.id}-${rowIndex}-${colIndex}`}
+                              style={{ height: 16, width: 16 }}
+                            />
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
+                  </RadioGroup>
+                ))}
+              </tbody>
+            </table>
+
+            {error && <p style={{ ...styles.errorText, margin: 12 }}>{error}</p>}
+          </div>
+
+          <Button
+            onClick={handleSubmit}
+            style={{ ...fieldStyles.button, marginTop: 14 }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-1px)";
+              e.target.style.boxShadow = "0 8px 20px rgba(102, 126, 234, 0.35)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "0 4px 12px rgba(102, 126, 234, 0.25)";
+            }}
+          >
+            Submit Answer
+          </Button>
+        </div>
+      );
+    }
+
     default:
       return (
         <div style={fieldStyles.container}>
@@ -950,10 +1089,20 @@ export default function App() {
     }
 
     // add user response bubble
+    const displayValue =
+      field.type === "matrix"
+        ? Object.entries(validatedValue)
+            .map(([rowIndex, colValue]) => {
+              const rowLabel = (field.matrixRows || ["Row 1", "Row 2", "Row 3"]) [Number(rowIndex)] || `Row ${Number(rowIndex) + 1}`;
+              return `${rowLabel}: ${colValue}`;
+            })
+            .join("\n")
+        : String(validatedValue);
+
     setConversation((prev) => [
       ...prev,
       { role: "system", content: field.label, timestamp: new Date() },
-      { role: "user", content: String(validatedValue), timestamp: new Date() },
+      { role: "user", content: displayValue, timestamp: new Date() },
     ]);
 
     const newAnswers = { ...answeredFields, [field.id]: validatedValue };
