@@ -1,7 +1,10 @@
 export async function apiRequest(method, url, data) {
   try {
-    // const res = await fetch(`http://localhost:5000${url}`, {
-    const res = await fetch(`https://intelliform.onrender.com${url}`, {
+    let finalUrl = `https://intelliform.onrender.com${url}`;
+    if (process.env.NODE_ENV === "development") {
+      finalUrl = `http://localhost:5000${url}`;
+    }
+    const res = await fetch(finalUrl, {
       method,
       headers: data ? { "Content-Type": "application/json" } : {},
       body: data ? JSON.stringify(data) : undefined,

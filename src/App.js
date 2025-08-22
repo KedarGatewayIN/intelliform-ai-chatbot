@@ -25,7 +25,7 @@ import {
 import { format } from "date-fns";
 import { apiRequest } from "./lib/utils";
 
-const DEVchatbotID = "ec4bcfa3-833c-46b6-b814-46cc6d23cef4";
+const DEVchatbotID = "afb87a1e-a0d2-4776-9a64-bf87bf4fe8f8";
 
 const styles = {
   page: {
@@ -1790,7 +1790,7 @@ export default function App() {
           right: "20px",
           width: "70px",
           height: "70px",
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          // background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
           color: "#ffffff",
           borderRadius: "50%",
           boxShadow:
@@ -1803,6 +1803,7 @@ export default function App() {
           alignItems: "center",
           justifyContent: "center",
           animation: isOpen ? "none" : "pulse 3s infinite",
+          overflow: "hidden",
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = "scale(1.1)";
@@ -1815,40 +1816,18 @@ export default function App() {
             "0 12px 35px rgba(102, 126, 234, 0.4), 0 6px 16px rgba(0, 0, 0, 0.15)";
         }}
       >
-        <div
+        <img
+          src="https://tse1.mm.bing.net/th/id/OIP.62xhYrRo3ea-St_vraobugHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"
+          alt="Gateway Logo"
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            borderRadius: "50%", // makes square logo circular
             transition: "transform 300ms ease",
-            transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+            transform: isOpen ? "rotate(360deg)" : "rotate(0deg)",
           }}
-        >
-          {isOpen ? (
-            <svg
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-              <path d="M8 9h8M8 13h6" />
-            </svg>
-          )}
-        </div>
+        />
       </button>
 
       <style jsx>{`
